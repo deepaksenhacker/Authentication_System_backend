@@ -49,25 +49,23 @@ router.post('/sign-in',async(req,res)=>{
     }
 
 })
-
 router.post('/sign-up', async (req, res) => {
-    const { email, password, name, phone } = req.body;
-
     try {
+        const { email, password, name, phone } = req.body;
+        console.log("Received signup data:", req.body);
+
         if (!email || !password || !name || !phone) {
-            return res.json({ error: "Fill all details" });
+            return res.status(400).json({ error: "Fill all details" });
         }
 
-        // Use findOne() instead of find()
-        const existingUser = await userModel.findOne({ email: email });
+        const existingUser = await userModel.findOne({ email });
 
         if (existingUser) {
-            return res.json({ error: "User is already signed up" });
+            return res.status(409).json({ error: "User is already signed up" });
         }
 
-        // Hash password before saving
-        const round = 12;
-        const encryptedPassword = await bcrypt.hash(password, round);
+        const saltRounds = 12;
+        const encryptedPassword = await bcrypt.hash(password, saltRounds);
 
         const user = new userModel({
             email,
@@ -77,15 +75,13 @@ router.post('/sign-up', async (req, res) => {
         });
 
         await user.save();
-         res.json({ success: "Successfully signed up with email!" });
+        res.status(201).json({ success: "Successfully signed up with email!" });
 
     } catch (error) {
-        console.error(error);
-        res.json({ error: "Server error" });
-        console.log(error)
+        console.error("Signup Error:", error);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
-
 
 
 export default router
