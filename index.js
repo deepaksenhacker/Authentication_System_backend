@@ -17,7 +17,7 @@ dbConnect();
 //       credentials:true
 
 //     }
-app.use(cors(corspolicy));
+app.use(cors());
 
 
 app.use(morgan('dev'))
