@@ -11,13 +11,7 @@ dbConnect();
 
 
 
-const corspolicy ={
-      origin:'http://localhost:5173',
-      methods:"GET,POST",
-      credentials:true
-
-    }
-app.use(cors(corspolicy));
+app.use(cors());
 
 
 app.use(morgan('dev'))
