@@ -82,6 +82,7 @@ router.post('/sign-up', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.json({ error: "Server error" });
+        console.log(error)
     }
 });
 
